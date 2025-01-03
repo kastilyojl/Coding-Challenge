@@ -1,0 +1,17 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserProfileController;
+ 
+Route::post('/register', [UsersController::class, 'register']);
+Route::post('/login', [UsersController::class, 'login']);
+Route::post('/', [UsersController::class, 'login']);
+Route::get('/dashboard', [UsersController::class, 'dashboard']);
+Route::post('/logout', [UsersController::class, 'logout']);
+// Route::post('/dashboard', [UserProfileController::class, 'index']);
+
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
