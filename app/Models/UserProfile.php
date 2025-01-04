@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use App\Models\User;
+
 class UserProfile extends Model
 {
     use HasFactory, Notifiable;
@@ -29,5 +31,10 @@ class UserProfile extends Model
     'education' => 'array', // Cast JSON to array
     'experience' => 'array', // Cast JSON to array
 ];
+
+public function profile()
+{
+    return $this->belongsTo(User::class, 'email', 'email');
+}
 
 }

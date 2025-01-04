@@ -39,7 +39,6 @@ const Register = () => {
                     homeAddress,
                     postalCode,
                     about,
-
                     skills,
                     education,
                     experience,

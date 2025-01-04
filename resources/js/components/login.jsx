@@ -35,7 +35,7 @@ const Login = () => {
                     "user",
                     JSON.stringify(response.data.user)
                 );
-                navigate("/dashboard");
+                navigate("/home");
             } else {
                 setError("Invalid login response. Please try again.");
             }

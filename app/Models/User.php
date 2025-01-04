@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\UserProfile;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -55,4 +56,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return []; // You can add custom claims if needed, like user roles, etc.
     }
+
+    public function profile()
+{
+    return $this->hasOne(UserProfile::class, 'email', 'email');
+}
 }

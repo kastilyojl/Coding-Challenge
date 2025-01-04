@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('firstName');
             $table->string('lastName');
-            $table->string('email');
-            $table->string('phoneNumber');
+            $table->string('email')->unique();
+            $table->string('phoneNumber')->nullable();
             $table->string('homeAddress');
-            $table->string('postalCode');
-            $table->string('about');
+            $table->string('postalCode')->nullable();
+            $table->string('about')->nullable();
             $table->json('skills')->nullable(); // Store skills as a JSON array
             $table->json('education')->nullable(); // Store education as a JSON array
             $table->json('experience')->nullable(); // Store experience as a JSON array
