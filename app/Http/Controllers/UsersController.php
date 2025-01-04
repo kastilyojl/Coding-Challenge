@@ -14,7 +14,7 @@ class UsersController extends Controller
     public function register(Request $request)
     {
          $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            // 'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
         ]);
@@ -24,7 +24,7 @@ class UsersController extends Controller
         }
 
          $user = User::create([
-            'name' => $request->name,
+            // 'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -47,11 +47,11 @@ class UsersController extends Controller
          $user = User::where('email', $request->email)->first();
     
        
-if (!$user) {
-    return response()->json(['error' => 'Invalid email address'], 401);
-} elseif (!Hash::check($request->password, $user->password)) {
-    return response()->json(['error' => 'Incorrect password'], 401);
-}
+    if (!$user) {
+        return response()->json(['error' => 'Invalid email address'], 401);
+    } elseif (!Hash::check($request->password, $user->password)) {
+        return response()->json(['error' => 'Incorrect password'], 401);
+    }
 
          $token = JWTAuth::fromUser($user);
     

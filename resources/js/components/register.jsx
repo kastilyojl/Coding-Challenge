@@ -3,11 +3,23 @@ import axios from "axios"; // Import axios for making API requests
 
 const Register = () => {
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); // State to store error message
     const [success, setSuccess] = useState(""); // State to store success message
     const [loading, setLoading] = useState(false); // State to manage loading state
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [homeAddress, setHomeAddress] = useState("");
+    const [postalCode, setPostalCode] = useState("");
+    const [about, setAbout] = useState("");
+
+    const [skills, setSkills] = useState([]); // State to hold dynamic skills input
+    const [education, setEducation] = useState([]); // State to hold dynamic skills input
+    const [experience, setExperience] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,9 +31,18 @@ const Register = () => {
             const response = await axios.post(
                 "http://127.0.0.1:8000/api/register",
                 {
-                    name,
+                    firstName,
+                    lastName,
                     email,
                     password,
+                    phoneNumber,
+                    homeAddress,
+                    postalCode,
+                    about,
+
+                    skills,
+                    education,
+                    experience,
                 }
             );
 
@@ -54,13 +75,40 @@ const Register = () => {
     return (
         <div className="w-full h-fu mt-2ll px-10 py-10 md:px-20 md:py-20 lg:px-40">
             <form>
-                <UserProfile /> <hr className="my-8" />
-                <Education /> <hr className="my-8" />
-                <Skills /> <hr className="my-8" />
-                <Experience /> <hr className="my-8" />
-                <Account /> <hr className="my-8" />
+                <UserProfile
+                    firstName={firstName}
+                    lastName={lastName}
+                    // email={email}
+                    phoneNumber={phoneNumber}
+                    homeAddress={homeAddress}
+                    postalCode={postalCode}
+                    about={about}
+                    setFirstName={setFirstName}
+                    setLastName={setLastName}
+                    setEmail={setEmail}
+                    setPhoneNumber={setPhoneNumber}
+                    setHomeAddress={setHomeAddress}
+                    setPostalCode={setPostalCode}
+                    setAbout={setAbout}
+                />{" "}
+                <hr className="my-8" />
+                <Education setEducation={setEducation} />{" "}
+                <hr className="my-8" />
+                <Skills setSkills={setSkills} /> <hr className="my-8" />
+                <Experience setExperience={setExperience} />{" "}
+                <hr className="my-8" />
+                <Account
+                    email={email}
+                    password={password}
+                    setEmail={setEmail}
+                    setPassword={setPassword}
+                />{" "}
+                <hr className="my-8" />
                 <div className="flex justify-end">
-                    <button className="py-2 px-6 rounded-md bg-green-800 text-white">
+                    <button
+                        onClick={handleSubmit}
+                        className="py-2 px-6 rounded-md bg-green-800 text-white"
+                    >
                         Register
                     </button>
                 </div>
@@ -69,7 +117,22 @@ const Register = () => {
     );
 };
 
-const UserProfile = () => {
+const UserProfile = ({
+    firstName,
+    lastName,
+    // email,
+    phoneNumber,
+    homeAddress,
+    postalCode,
+    about,
+    setFirstName,
+    setLastName,
+    // setEmail,
+    setPhoneNumber,
+    setHomeAddress,
+    setPostalCode,
+    setAbout,
+}) => {
     return (
         <div className="lg:grid lg:grid-cols-[30%_1fr]">
             <div>
@@ -86,6 +149,9 @@ const UserProfile = () => {
                         <input
                             className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none "
                             type="text"
+                            id="firstName"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
                         />
                     </div>
                     <div>
@@ -95,19 +161,25 @@ const UserProfile = () => {
                         <input
                             className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                             type="text"
+                            id="lastName"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                         />
                     </div>
                 </div>
                 <div className="lg:grid lg:grid-cols-2 lg:gap-10">
-                    <div>
+                    {/* <div>
                         <label className="font-semibold" htmlFor="">
                             Email Address
                         </label>
                         <input
                             className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                             type="text"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-                    </div>
+                    </div> */}
                     <div>
                         <label className="font-semibold" htmlFor="">
                             Phone Number
@@ -115,6 +187,9 @@ const UserProfile = () => {
                         <input
                             className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                             type="text"
+                            id="phoneNumber"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                         />
                     </div>
                 </div>
@@ -126,6 +201,9 @@ const UserProfile = () => {
                         <input
                             className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                             type="text"
+                            id="homeAddress"
+                            value={homeAddress}
+                            onChange={(e) => setHomeAddress(e.target.value)}
                         />
                     </div>
                     <div>
@@ -135,6 +213,9 @@ const UserProfile = () => {
                         <input
                             className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                             type="text"
+                            id="postalCode"
+                            value={postalCode}
+                            onChange={(e) => setPostalCode(e.target.value)}
                         />
                     </div>
                 </div>
@@ -144,8 +225,9 @@ const UserProfile = () => {
                     </label>
                     <textarea
                         className="w-full h-40 mt-2 rounded-md pl-4 py-4 border-2 border-slate-300 focus:border-green-800 focus:outline-none"
-                        name=""
-                        id=""
+                        id="about"
+                        value={about}
+                        onChange={(e) => setAbout(e.target.value)}
                     ></textarea>
                 </div>
             </div>
@@ -153,10 +235,11 @@ const UserProfile = () => {
     );
 };
 
-const Skills = () => {
+const Skills = ({ setSkills }) => {
     const [inputs, setInputs] = useState([""]);
 
-    const addInputField = () => {
+    const addInputField = (e) => {
+        e.preventDefault();
         setInputs([...inputs, ""]);
     };
 
@@ -164,6 +247,7 @@ const Skills = () => {
         const newInputs = [...inputs];
         newInputs[index] = value;
         setInputs(newInputs);
+        setSkills(newInputs);
     };
 
     return (
@@ -182,7 +266,11 @@ const Skills = () => {
                                 type="text"
                                 value={input}
                                 onChange={(e) =>
-                                    handleInputChange(index, e.target.value)
+                                    handleInputChange(
+                                        index,
+
+                                        e.target.value
+                                    )
                                 }
                                 placeholder="Enter Skills"
                             />
@@ -192,7 +280,6 @@ const Skills = () => {
                 <button
                     className="bg-[#166534] rounded-sm py-2 px-6 text-white"
                     onClick={addInputField}
-                    ld
                 >
                     Add Skills
                 </button>
@@ -201,18 +288,25 @@ const Skills = () => {
     );
 };
 
-const Education = () => {
-    const [inputs, setInputs] = useState([""]);
+const Education = ({ setEducation }) => {
+    const [inputs, setInputs] = useState([
+        { institution: "", course: "", startDate: "", endDate: "" },
+    ]);
 
     const addInputField = () => {
-        setInputs([...inputs, ""]);
+        setInputs([
+            ...inputs,
+            { institution: "", course: "", startDate: "", endDate: "" },
+        ]);
     };
 
-    const handleInputChange = (index, value) => {
+    const handleInputChange = (index, field, value) => {
         const newInputs = [...inputs];
-        newInputs[index] = value;
+        newInputs[index][field] = value;
         setInputs(newInputs);
+        setEducation(newInputs); // Pass updated education data to parent
     };
+
     return (
         <div className="lg:grid lg:grid-cols-[30%_1fr]">
             <div>
@@ -229,8 +323,16 @@ const Education = () => {
                                     Institution
                                 </label>
                                 <input
-                                    className="w-full h-10  mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
+                                    className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="text"
+                                    value={input.institution}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "institution",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                             <div>
@@ -238,8 +340,16 @@ const Education = () => {
                                     Course
                                 </label>
                                 <input
-                                    className="w-full h-10  mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
+                                    className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="text"
+                                    value={input.course}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "course",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
@@ -251,6 +361,14 @@ const Education = () => {
                                 <input
                                     className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="month"
+                                    value={input.startDate}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "startDate",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                             <div>
@@ -260,6 +378,14 @@ const Education = () => {
                                 <input
                                     className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="month"
+                                    value={input.endDate}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "endDate",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
@@ -267,8 +393,8 @@ const Education = () => {
                 ))}
                 <button
                     className="bg-[#166534] rounded-sm py-2 px-6 text-white"
+                    type="button"
                     onClick={addInputField}
-                    ld
                 >
                     Add Education
                 </button>
@@ -277,18 +403,37 @@ const Education = () => {
     );
 };
 
-const Experience = () => {
-    const [inputs, setInputs] = useState([""]);
+const Experience = ({ setExperience }) => {
+    const [inputs, setInputs] = useState([
+        {
+            jobTitle: "",
+            employer: "",
+            startDate: "",
+            endDate: "",
+            jobDescription: "",
+        },
+    ]);
 
     const addInputField = () => {
-        setInputs([...inputs, ""]);
+        setInputs([
+            ...inputs,
+            {
+                jobTitle: "",
+                employer: "",
+                startDate: "",
+                endDate: "",
+                jobDescription: "",
+            },
+        ]);
     };
 
-    const handleInputChange = (index, value) => {
+    const handleInputChange = (index, field, value) => {
         const newInputs = [...inputs];
-        newInputs[index] = value;
+        newInputs[index][field] = value;
         setInputs(newInputs);
+        setExperience(newInputs); // Pass updated experience data to parent
     };
+
     return (
         <div className="lg:grid lg:grid-cols-[30%_1fr]">
             <div>
@@ -299,7 +444,7 @@ const Experience = () => {
             <div>
                 {inputs.map((input, index) => (
                     <div key={index} className="mb-8">
-                        <div className="lg:grid lg:grid-cols-[1fr_1fr] llg:gap-10 mb-8">
+                        <div className="lg:grid lg:grid-cols-[1fr_1fr] lg:gap-10 mb-8">
                             <div>
                                 <label className="font-semibold" htmlFor="">
                                     Job Title
@@ -307,6 +452,14 @@ const Experience = () => {
                                 <input
                                     className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="text"
+                                    value={input.jobTitle}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "jobTitle",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                             <div>
@@ -316,6 +469,14 @@ const Experience = () => {
                                 <input
                                     className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="text"
+                                    value={input.employer}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "employer",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
@@ -327,6 +488,14 @@ const Experience = () => {
                                 <input
                                     className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="month"
+                                    value={input.startDate}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "startDate",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                             <div>
@@ -336,6 +505,14 @@ const Experience = () => {
                                 <input
                                     className="w-full h-10 mt-2 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                                     type="month"
+                                    value={input.endDate}
+                                    onChange={(e) =>
+                                        handleInputChange(
+                                            index,
+                                            "endDate",
+                                            e.target.value
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
@@ -345,17 +522,22 @@ const Experience = () => {
                             </label>
                             <textarea
                                 className="w-full h-40 mt-2 rounded-md pl-4 py-4 border-2 border-slate-300 focus:border-green-800 focus:outline-none"
-                                mtmt-2
-                                name=""
-                                id=""
+                                value={input.jobDescription}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        index,
+                                        "jobDescription",
+                                        e.target.value
+                                    )
+                                }
                             ></textarea>
                         </div>
                     </div>
                 ))}
                 <button
                     className="bg-[#166534] rounded-sm py-2 px-6 text-white"
+                    type="button"
                     onClick={addInputField}
-                    ld
                 >
                     Add Experience
                 </button>
@@ -364,7 +546,7 @@ const Experience = () => {
     );
 };
 
-const Account = () => {
+const Account = ({ email, setEmail, password, setPassword }) => {
     return (
         <div className="lg:grid lg:grid-cols-[30%_1fr]">
             <div>
@@ -395,13 +577,13 @@ const Account = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <label className="font-semibold" htmlFor="">
+                {/* <label className="font-semibold" htmlFor="">
                     Confirm Password
                 </label>
                 <input
                     className="lg:w-[50%] h-10 mt-2 mb-8 rounded-md border-2 border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
                     type="text"
-                />
+                /> */}
             </div>
         </div>
     );

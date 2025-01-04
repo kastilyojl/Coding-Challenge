@@ -101,3 +101,7 @@ create folder named components
 
             </body>
             </html>
+
+php artisan make:model UserProfile
+php artisan make:migration create_experience_table
+php artisan migrate

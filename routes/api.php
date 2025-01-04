@@ -6,6 +6,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\UserProfileController;
  
 Route::post('/register', [UsersController::class, 'register']);
+Route::post('/register', [UserProfileController::class, 'userData']);
 Route::post('/login', [UsersController::class, 'login']);
 Route::post('/', [UsersController::class, 'login']);
 Route::get('/dashboard', [UsersController::class, 'dashboard']);
