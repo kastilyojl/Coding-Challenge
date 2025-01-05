@@ -118,6 +118,7 @@ class UsersController extends Controller
         ]);
         
     }
+    
     public function logout(Request $request)
     {
         try {
