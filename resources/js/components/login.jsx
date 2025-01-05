@@ -73,7 +73,7 @@ const Login = () => {
                         onSubmit={handleSubmit}
                     >
                         <input
-                            className="h-8 focus:outline-none pl-2 border-b-2 border-b-black"
+                            className="h-8 focus:outline-none pl-2 text-[14px] border-b-[1px] border-b-green-800"
                             type="email"
                             id="email"
                             value={email}
@@ -82,7 +82,7 @@ const Login = () => {
                             required
                         />
                         <input
-                            className="h-8 pl-2 focus:outline-none border-b-2 border-b-black"
+                            className="h-8 pl-2 focus:outline-none text-[14px] border-b-[1px] border-b-green-800"
                             type="password"
                             id="password"
                             value={password}
@@ -90,29 +90,31 @@ const Login = () => {
                             placeholder="Enter your password"
                             required
                         />
-                        <p>
+                        <p className="text-[12px]">
                             Don't have an account yet?
                             <Link className="text-cyan-600 px-2" to="/register">
                                 Register
                             </Link>
                         </p>
                         <button
-                            className="bg-green-800 p-2 text-white rounded-md w-[200px] mx-auto"
+                            className="bg-green-800 p-2 text-white rounded-md w-[140px] mx-auto"
                             type="submit"
                             disabled={loading}
                         >
                             {loading ? "Logging in..." : "Login"}
                         </button>
-                        {error && (
-                            <div className="alert alert-danger mt-3">
-                                {error}
-                            </div>
-                        )}
-                        {success && (
-                            <div className="alert alert-success mt-3">
-                                {success}
-                            </div>
-                        )}
+                        <div className="relative">
+                            {error && (
+                                <div className="text-[12px] text-red-700 absolute">
+                                    {error}
+                                </div>
+                            )}
+                            {success && (
+                                <div className="text-[12px]  text-green-600">
+                                    {success}
+                                </div>
+                            )}
+                        </div>
                     </form>
                 </div>
             </div>

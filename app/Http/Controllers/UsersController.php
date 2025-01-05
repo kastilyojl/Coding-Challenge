@@ -11,63 +11,72 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UsersController extends Controller
-{
-    public function register(Request $request)
+{public function register(Request $request)
     {
-         $validator = Validator::make($request->all(), [
-            // 'firstName' => 'required|string|max:255',
-            // 'lastName' => 'required|string|max:255',
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-
             'firstName' => 'required|string',
-                'lastName' => 'required|string',
-     
-                'phoneNumber' => 'nullable|string',
-                'homeAddress' => 'required|string',
-                'postalCode' => 'nullable|string',
-                'about' => 'nullable|string',
-                
-                'skills' => 'nullable|array', // skills should be an array
-                'education' => 'nullable|array',
-                'experience' => 'nullable|array',
+            'lastName' => 'required|string',
+            'imagePath' => 'required|image', // Validate if it's an image
+            'phoneNumber' => 'nullable|string',
+            'homeAddress' => 'required|string',
+            'postalCode' => 'nullable|string',
+            'about' => 'nullable|string',
+            'skills' => 'nullable',
+            'education' => 'nullable',
+            'experience' => 'nullable',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
+    
+        // Handle the image upload if it's present
+        if ($request->hasFile('imagePath')) {
+            // Store the image in the 'public/images' directory         
+            $imagePath = $request->file('imagePath')->store('user_picture', 'public');
+            // Remove the 'public/' part from the path for saving in the database
+            $imagePath = str_replace('public/', '', $imagePath);           
+        } else {
+            $imagePath = null; // If no image is uploaded, set it as null
+        }
+    
+        // Create the user profile with the image path
         $userprofile = UserProfile::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'email' => $request->email,
             'phoneNumber' => $request->phoneNumber,
+            'user_pic' => $imagePath,  // Save the image path here
             'homeAddress' => $request->homeAddress,
             'postalCode' => $request->postalCode,
             'about' => $request->about,
             'skills' => $request->skills, // skills should be an array
             'education' => $request->education,
             'experience' => $request->experience,
-]);
-
+        ]);
+    
         $name = $request->firstName . ' ' . $request->lastName;
-
-         $user = User::create([
+    
+        // Create the user and return the JWT token
+        $user = User::create([
             'name' => $name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
-         $token = JWTAuth::fromUser($user);
-
-         return response()->json([
+    
+        $token = JWTAuth::fromUser($user);
+    
+        return response()->json([
             'message' => 'User registered successfully',
             'user_profile' => $userprofile,
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'image_url' => asset('storage/' . $imagePath)
         ], 201);
     }
-
+    
 
     public function login(Request $request)
 {
@@ -112,7 +121,7 @@ class UsersController extends Controller
             return response()->json(['error' => 'Token not provided'], 401);
         }
     
-         return response()->json([
+    return response()->json([
             'user' => $user,
             'message' => 'Welcome to your dashboard'
         ]);

@@ -105,3 +105,10 @@ create folder named components
 php artisan make:model UserProfile
 php artisan make:migration create_experience_table
 php artisan migrate
+
+create a folder in storage/app/public to store user image - It's not a good practice to store
+
+user-uploaded images directly inside the resources folder because it is meant for frontend assets like views, CSS, JS files, and compiling. These assets are typically compiled or processed, not used for storing dynamic user-uploaded files.
+It’s recommended to store images in the storage folder, specifically storage/app/public, and then create a symbolic link to make the images publicly accessible.
+
+php artisan storage:link - create a symbolic link, making the image store in public accessible publicly
