@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import axios from "axios"; // Import axios for making API requests
-import { useNavigate } from "react-router-dom";
+import axios from "axios"; // handle HTTP requests to the backend API
+import { useNavigate } from "react-router-dom"; // programmatic page navigation
 
 const Register = () => {
     const [name, setName] = useState("");
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // programmatic page navigation
 
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(""); // State to store error message
-    const [success, setSuccess] = useState(""); // State to store success message
-    const [loading, setLoading] = useState(false); // State to manage loading state
+    const [password, setPassword] = useState(""); // State to store and manage password state
+    const [confirmpassword, setConfirmpassword] = useState(""); // State to store and manage confirm password state
+    const [error, setError] = useState(""); // State to store and manage error state
+    const [success, setSuccess] = useState(""); // State to store success and manage message
+    const [loading, setLoading] = useState(false); // State to manage loading and manage loading state
 
-    const [firstName, setFirstName] = useState("");
+    const [firstName, setFirstName] = useState(""); // State to store and manage the firstName state
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -21,7 +22,7 @@ const Register = () => {
     const [about, setAbout] = useState("");
 
     const [skills, setSkills] = useState([]); // State to hold dynamic skills input
-    const [education, setEducation] = useState([]); // State to hold dynamic skills input
+    const [education, setEducation] = useState([]);
     const [experience, setExperience] = useState([]);
 
     const handleSubmit = async (e) => {
@@ -30,7 +31,7 @@ const Register = () => {
         setError(""); // Clear any previous errors
         setSuccess(""); // Clear any previous success messages
 
-        // Check if image is provided
+        // Check if condition is met, if not update the error state
         if (!firstName) {
             setError("First Name is required.");
             setLoading(false);
@@ -49,7 +50,14 @@ const Register = () => {
             return;
         }
 
-        // Use FormData to send the image as a file
+        // check if password and confirm password have the same value
+        if (password !== confirmpassword) {
+            setError("Password do not match.");
+            setLoading(false);
+            return;
+        }
+
+        // Use FormData to send the user data, including the image
         const formData = new FormData();
         formData.append("firstName", firstName);
         formData.append("lastName", lastName);
@@ -59,31 +67,32 @@ const Register = () => {
         formData.append("homeAddress", homeAddress);
         formData.append("postalCode", postalCode);
         formData.append("about", about);
-        formData.append("skills", JSON.stringify(skills)); // skills should be an array (JSON)
-        formData.append("education", JSON.stringify(education)); // education as array (JSON)
-        formData.append("experience", JSON.stringify(experience)); // experience as array (JSON)
-        formData.append("imagePath", imagePath); // Send the actual file here
+        formData.append("skills", JSON.stringify(skills)); // convert the array into JSON string
+        formData.append("education", JSON.stringify(education)); // convert the array into JSON string
+        formData.append("experience", JSON.stringify(experience)); // convert the array into JSON string
+        formData.append("imagePath", imagePath);
 
         try {
+            // send POST request to the register API endpoint
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/register",
+                "http://127.0.0.1:8000/api/register", // API endpoint for register
                 formData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data", // Make sure to set multipart/form-data
+                        "Content-Type": "multipart/form-data", // multipart/form-data to handle file upload (image)
                     },
                 }
             );
 
-            console.log("Response:", response.data); // Log the response to check success
+            console.log("Response:", response.data); // Log response
 
             // Handle success response
             setSuccess("Registration successful! Please log in.");
-            navigate("/success");
+            navigate("/success"); // navigate to the success page after successful register
         } catch (err) {
             setLoading(false); // Set loading to false when the request is done
             if (err.response) {
-                console.error("Error response:", err.response); // Log the full response
+                console.error("Error response:", err.response); // Log response
 
                 // Check if there are validation errors and log them
                 if (err.response.data.errors) {
@@ -108,7 +117,9 @@ const Register = () => {
 
     return (
         <div className="w-full h-fu mt-2ll px-10 py-10 md:px-20 md:py-20 lg:px-40">
+            {/* multipart/form-data to handle file upload */}
             <form encType="multipart/form-data">
+                {/* UserProfile component with passed values and setters for state management */}
                 <UserProfile
                     firstName={firstName}
                     lastName={lastName}
@@ -137,15 +148,19 @@ const Register = () => {
                     password={password}
                     setEmail={setEmail}
                     setPassword={setPassword}
+                    confirmpassword={confirmpassword}
+                    setConfirmpassword={setConfirmpassword}
                 />{" "}
                 <hr className="my-8" />
                 <div className="flex justify-between">
                     <div className="">
+                        {/* display the error message stored */}
                         {error && (
                             <div className="text-[12px] text-red-700">
                                 {error}
                             </div>
                         )}
+                        {/* display the succes message stored */}
                         {success && (
                             <div className="text-[12px]  text-green-600">
                                 {success}
@@ -164,6 +179,7 @@ const Register = () => {
     );
 };
 
+// UserProfile Component that sends data to the Parent Component via props
 const UserProfile = ({
     firstName,
     lastName,
@@ -291,7 +307,7 @@ const UserProfile = ({
                         About
                     </label>
                     <textarea
-                        className="w-full h-40 rounded-sm pl-4 py-4 border-[1px] text-[14px] border-slate-300 focus:border-green-800 focus:outline-none"
+                        className="w-full h-40 rounded-sm p-4 border-[1px] text-[14px] border-slate-300 focus:border-green-800 focus:outline-none"
                         id="about"
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
@@ -302,9 +318,11 @@ const UserProfile = ({
     );
 };
 
+// Skills Component
 const Skills = ({ setSkills }) => {
     const [inputs, setInputs] = useState([""]);
 
+    // add a new input field
     const addInputField = (e) => {
         e.preventDefault();
         setInputs([...inputs, ""]);
@@ -314,7 +332,7 @@ const Skills = ({ setSkills }) => {
         const newInputs = [...inputs];
         newInputs[index] = value;
         setInputs(newInputs);
-        setSkills(newInputs);
+        setSkills(newInputs); // Pass updated skills data to parent (UserProfile)
     };
 
     return (
@@ -355,11 +373,13 @@ const Skills = ({ setSkills }) => {
     );
 };
 
+// Education Component
 const Education = ({ setEducation }) => {
     const [inputs, setInputs] = useState([
         { institution: "", course: "", startDate: "", endDate: "" },
     ]);
 
+    // add input field
     const addInputField = () => {
         setInputs([
             ...inputs,
@@ -371,7 +391,7 @@ const Education = ({ setEducation }) => {
         const newInputs = [...inputs];
         newInputs[index][field] = value;
         setInputs(newInputs);
-        setEducation(newInputs); // Pass updated education data to parent
+        setEducation(newInputs); // Pass updated education data to parent (UserProfile)
     };
 
     return (
@@ -482,6 +502,7 @@ const Education = ({ setEducation }) => {
     );
 };
 
+// Experience Component
 const Experience = ({ setExperience }) => {
     const [inputs, setInputs] = useState([
         {
@@ -493,6 +514,7 @@ const Experience = ({ setExperience }) => {
         },
     ]);
 
+    // add inout field
     const addInputField = () => {
         setInputs([
             ...inputs,
@@ -510,7 +532,7 @@ const Experience = ({ setExperience }) => {
         const newInputs = [...inputs];
         newInputs[index][field] = value;
         setInputs(newInputs);
-        setExperience(newInputs); // Pass updated experience data to parent
+        setExperience(newInputs); // Pass updated experience data to parent (UserProfile)
     };
 
     return (
@@ -615,7 +637,7 @@ const Experience = ({ setExperience }) => {
                                 Job Description
                             </label>
                             <textarea
-                                className="w-full h-40 rounded-sm pl-4 py-4 border-[1px] text-[14px] border-slate-300 focus:border-green-800 focus:outline-none"
+                                className="w-full h-40 rounded-sm p-4 border-[1px] text-[14px] border-slate-300 focus:border-green-800 focus:outline-none"
                                 value={input.jobDescription}
                                 onChange={(e) =>
                                     handleInputChange(
@@ -640,7 +662,15 @@ const Experience = ({ setExperience }) => {
     );
 };
 
-const Account = ({ email, setEmail, password, setPassword }) => {
+// Account Component that sends data to the Parent Component via props
+const Account = ({
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmpassword,
+    setConfirmpassword,
+}) => {
     return (
         <div className="lg:grid lg:grid-cols-[30%_1fr]">
             <div>
@@ -669,6 +699,17 @@ const Account = ({ email, setEmail, password, setPassword }) => {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <label className="font-semibold text-[14px]" htmlFor="password">
+                    Confirm Password
+                </label>
+                <input
+                    className="lg:w-[50%] h-8 mb-8 rounded-sm border-[1px] text-[14px] border-slate-300 pl-4 focus:border-green-800 focus:outline-none"
+                    type="password"
+                    id="confirmpassword"
+                    value={confirmpassword}
+                    onChange={(e) => setConfirmpassword(e.target.value)}
                     required
                 />
                 {/* <label className="font-semibold" htmlFor="">

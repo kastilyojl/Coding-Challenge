@@ -13,7 +13,7 @@ class UserProfile extends Model
 
     protected $table = 'user_profile';  // Correct table name (singular)
     
-   protected $fillable = [
+   protected $fillable = [ // mass-assign which column in table in database can have a value
        'firstName',
        'lastName',
        'email',
@@ -24,7 +24,7 @@ class UserProfile extends Model
        'about',
        'skills',
        'education',
-       'experience'
+       'experience',
    ];
 
    protected $casts = [
@@ -33,7 +33,7 @@ class UserProfile extends Model
     'experience' => 'array', // Cast JSON to array
 ];
 
-public function profile()
+public function profile() // create a connection to User Model to access to connect 2 table using email as foreign key
 {
     return $this->belongsTo(User::class, 'email', 'email');
 }

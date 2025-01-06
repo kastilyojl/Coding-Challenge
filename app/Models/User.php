@@ -48,16 +48,16 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function getJWTIdentifier()
+    public function getJWTIdentifier() // unique identifier for the user
     {
-        return $this->getKey(); // The unique identifier for the user (typically the id)
+        return $this->getKey();
     }
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims() // add custom claims (like roles)
     {
-        return []; // You can add custom claims if needed, like user roles, etc.
+        return []; 
     }
 
-    public function profile()
+    public function profile() // create a connection to UserProfile Model to access to connect 2 table using email as foreign key
 {
     return $this->hasOne(UserProfile::class, 'email', 'email');
 }

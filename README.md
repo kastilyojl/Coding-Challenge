@@ -1,114 +1,92 @@
-Laravel Setup
-Laravel new [project_name]
-for starter kit: [none] -
-[breeze] – session based authentication
-[jetstream] – primarily design for session-based authentication
-[pest] for testing framework
-[mysql] for database [change based on your preference]
-[yes] to run default database migration: this will automatically create a database [local server is running].
-if not, create a database first (you can only create db manually in laravel),
-then update the DB_DATABASE = [db_name]
-then, in terminal run php artisan migrate to run database migration
+## Laravel Project Setup
 
-php artisan install:api - this will enabled API route in laravel 11: this will published API route file
+1.  Create a new Laravel project:
 
-Backend
+        laravel new [project_name]
 
-Jason Web Token (JWT) Authentication Setup
+2.  For starter kit:
 
-    composer require tymon/jwt-auth - this will install package for JWT-based authentication
+        [none] – No authentication (choose this option)
+
+        [breeze] – Simple Session-based authentication
+
+        [jetstream] – Advanced Session-based authentication with additional features
+
+3.  Testing framework
+
+        [0] Pest
+
+4.  For database:
+
+        [mysql] (change based on your preference)
+
+5.  Run default database migration:
+
+-   When prompted, type [yes] to run the default database migration. This will automatically create a database (if the local server is running).
+
+    -   If not, create the database manually first.
+        Then, update the DB_DATABASE value in your .env file to the desired database name.
+
+            Run the migration:
+
+        In terminal, run:
+
+                php artisan migrate
+
+        This will run the database migrations.
+
+6.  Enable API routes:
+
+            php artisan install:api
+        This will publish the API route file.
+
+## JWT (JSON Web Token) Authentication Setup
+
+Run the following command to install the package for JWT-based authentication:
+
+    composer require tymon/jwt-auth
+
+Publish the JWT configuration file:
+
     php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
-            - willl publish JWT configuration file (jwt.php unser config will be created)
-    php artisan jwt:secret - to generate secret key (you can found this at .env file)
 
-    update config\auth.php
-        'guards' => [
-            'api' => [
-                'driver' => 'jwt',
-                'provider' => 'users',
-            ],
-        ]
+This will create the jwt.php configuration file in the config directory.
 
-    in app\Models\User
+Run the following command to generate a secret key (this key will be stored in the .env file):
 
-        use Tymon\JWTAuth\Contracts\JWTSubject;
+    php artisan jwt:secret
 
-        class User extends Authenticatable implements JWTSubject {
-            public function getJWTIdentifier() {
-                return $this->getKey();
-            }
+Create a controller to handle login, registration, and other actions:
 
-            public function getJWTCustomClaims() {
-                return [];
-            }
-        }
+    php artisan make:controller [controller_name]
 
-    php artisan make:controller [controller_name] - this will create a [controller_name] to handle login, register, and other action made
+## React + Vite Setup
 
+1.  Open the newly created Laravel project.
+2.  Install all the dependencies listed in the package.json by running the following command in the terminal (Ctrl + J to open the terminal):
 
-    App\Controller\UsersController
-        use App\Models\User;
-        use Illuminate\Support\Facades\Validator;
-        use Illuminate\Support\Facades\Hash; - For Password Hashing
-        use Tymon\JWTAuth\Facades\JWTAuth; - for JWT Authentication
+        npm install
 
-        Now, create a different function to handle login, register, and home
+    This includes Vite and Tailwind
 
-    routs\api
-        define route for each API
-        Route::post('/register', [UsersController::class, 'register']);
+3.  Install the Vite plugin to enable React support in Vite by running this command:
 
+        npm install --save-dev @vitejs/plugin-react
 
-    (Try it using postman: http://127.0.0.1:8000/api/register?name=MarkEric1&email=sample@gmail.com&password=samplepassword)
+4.  Install axios to handle API requests:
 
-React + Vite Setup
+        npm install axios
 
-    Open then new created laravel project
-    Install all the  dependencies in  package.json by doing this:
-    	Open the terminal [ctrl + j] and run: npm install
-    Install vite:plugin to allows react to support vite by running this command
-    	npm install --save-dev @vitejs/plugin-react
-    locate vite.config.js and add this:
-    	import react from '@vitejs/plugin-react';
-    	export default { plugins: [react(), ] };
-    locate tailwind.config.js
-        content: ["./resources/**/*.jsx",]
+5.  Install react-router-dom, which is the React Router library used for navigation and routing:
 
-    npm install axios - responsible to make API request
-    npm install react-router-dom - install React Router Library, used for navigation and routing
+        npm install react-router-dom
 
-resources/js
-change app.js -> app.jsx
-create folder named components
+## Store images in the storage folder and access them via URL
 
-    resources/js/components
-        create a jsx file name login, register
-        create router.jsx
+1.  Create a folder in storage/app/public to store user images.
 
-    resources/views/welcome
-        update it: <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
-                @viteReactRefresh
-                @vite(["resources/css/app.css", "resources/js/app.jsx"])
-            </head>
-            <body>
+    In terminal:
 
-                <div class="h-screen flex items-center justify-center" id="app"></div>
+        php artisan storage:link
 
-            </body>
-            </html>
-
-php artisan make:model UserProfile
-php artisan make:migration create_experience_table
-php artisan migrate
-
-create a folder in storage/app/public to store user image - It's not a good practice to store
-
-user-uploaded images directly inside the resources folder because it is meant for frontend assets like views, CSS, JS files, and compiling. These assets are typically compiled or processed, not used for storing dynamic user-uploaded files.
-It’s recommended to store images in the storage folder, specifically storage/app/public, and then create a symbolic link to make the images publicly accessible.
-
-php artisan storage:link - create a symbolic link, making the image store in public accessible publicly
+    This will creates a symbolic link between the public/storage directory and the storage/app/public directory, making files stored in the storage/app/public directory publicly accessible via a URL.
