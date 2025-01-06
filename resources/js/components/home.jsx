@@ -139,8 +139,8 @@ function Home() {
             </div>
 
             <div className="flex flex-col lg:grid lg:grid-cols-[30%_70%] lg:mx-20">
-                <div className="grid grid-rrows-[60%_40%] gap-5 p-9">
-                    <div className="border-2 flex flex-col items-center px-6 py-6 shadow-lg">
+                <div className="gap-5 p-9">
+                    <div className="border-2 flex flex-col items-center px-6 py-6 shadow-lg mb-5">
                         <div className="w-32 h-32 border-2 rounded-[50%] mb-4">
                             <img
                                 src={`http://127.0.0.1:8000/storage/${profile?.user_pic}`}
@@ -161,7 +161,16 @@ function Home() {
                             {profile?.homeAddress}, {profile?.postalCode}
                         </h3>
                         <div className="w-full h-[0.5px] bg-green-800 my-4"></div>
-                        <h3 className="text-center"> {profile?.about} </h3>
+                        <h3 className="text-center text-[14px]">
+                            {" "}
+                            {profile?.about}
+                            {profile?.about}
+                            {profile?.about} {profile?.about}
+                            {profile?.about}
+                            {profile?.about}
+                            {profile?.about}
+                            {profile?.about}
+                        </h3>
                     </div>
                     <div>
                         <h1 className="text-[18px] mb-2 text-green-800 font-semibold">
@@ -203,21 +212,29 @@ function Home() {
                             typeof profile.skills === "object" ? (
                                 Object.values(profile.education).map(
                                     (edu, index) => (
-                                        <div key={index}>
+                                        <div key={index} className="mb-5">
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>Institution:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    Institution:
+                                                </p>{" "}
                                                 {edu.institution}
                                             </p>
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>Course:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    Course:
+                                                </p>{" "}
                                                 {edu.course}
                                             </p>
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>Start Date:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    Start Date:
+                                                </p>{" "}
                                                 {edu.startDate}
                                             </p>
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>End Date:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    End Date:
+                                                </p>{" "}
                                                 {edu.endDate}
                                             </p>
                                         </div>
@@ -242,22 +259,36 @@ function Home() {
                             typeof profile.experience === "object" ? (
                                 Object.values(profile.experience).map(
                                     (exp, index) => (
-                                        <div key={index}>
+                                        <div key={index} className="mb-5">
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>Job Title:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    Job Title:
+                                                </p>{" "}
                                                 {exp.jobTitle}
                                             </p>
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>Employer:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    Employer:
+                                                </p>{" "}
                                                 {exp.employer}
                                             </p>
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>Start Date:</strong>{" "}
+                                                <p className="font-semibold text-[14px]">
+                                                    Start Date:
+                                                </p>{" "}
                                                 {exp.startDate}
                                             </p>
                                             <p className="text-[14px] grid grid-cols-[100px_1fr]">
-                                                <strong>End Date:</strong>{" "}
-                                                {exp.description}
+                                                <p className="font-semibold text-[14px]">
+                                                    End Date:
+                                                </p>{" "}
+                                                {exp.endDate}
+                                            </p>
+                                            <p className="text-[14px] grid grid-cols-[100px_1fr]">
+                                                <p className="font-semibold text-[14px]">
+                                                    Description:
+                                                </p>{" "}
+                                                {exp.jobDescription}
                                             </p>
                                         </div>
                                     )
