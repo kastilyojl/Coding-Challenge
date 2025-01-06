@@ -56,10 +56,6 @@ Run the following command to generate a secret key (this key will be stored in t
 
     php artisan jwt:secret
 
-Create a controller to handle login, registration, and other actions:
-
-    php artisan make:controller [controller_name]
-
 ## React + Vite Setup
 
 1.  Open the newly created Laravel project.
